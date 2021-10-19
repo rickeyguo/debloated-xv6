@@ -1,3 +1,56 @@
-Replacing
-1234
-Rickey
+# debloating xv6
+
+In most operating systems, an application can freely call any system calls. However, most of them may not be needed. For example, cat program running on a file does not need to access network sockets. Indeed, an application that can access all types of system calls results in an over-powered process, leading to security issues.
+
+In this project, your goal is to (1) identify a set of system calls required for each program in xv6 and (2) block the system calls that is not required at runtime.
+
+Tasks
+
+- Implementing Access Control on System Calls
+- Profiling each application to understand which system calls are needed and which are not
+- Understanding static/dynamic analysis for profiling
+	- Static: Inspect the source code of the program to understand which system calls will be called (You need to make sure you analyze all the code that may change their behaviors dynamically at runtime)
+	- Dynamic: Run the program to observe the system calls (You need to make sure all the code are executed)
+- Maintaining rules that determine which system calls are allowed and blocked for each process.
+- Enforcing the rules at runtime.
+- Handling Exceptions: If a system call that is not allowed is invoked, do not execute in the kernel, but return an error instead.
+
+Applications
+- What you can do with this?
+- Code debloating is an active research area in systems security. Identifying and reducing the input space and program code can be useful to prevent attacks who want to reuse your own code to conduct attacks such as ROP (Return Oriented Programming).
+
+Recommended Timeline: As early as possible.
+
+In each system call, have a if statement to check if the process
+
+Static: go through the code line by line and identify system calls
+Dynamic: create a log all of the system calls to cover all your bases. 
+
+xv6 is a modern re-implementation of the Sixth Edition Unix in ANSI C for multiprocessor x86 and RISC-V systems. xv6 was developed by MIT as a teaching operating system for their “6.828” course. A vital fact about xv6 is that it contains all the core Unix concepts and has a similar structure to Unix even though it lacks some functionality that you would expect from a modern operating system. This is a lightweight operating system where the time to compile is very low and it also allows remote debugging.
+
+QEMU is a free and open-source emulator and virtualizer that can perform hardware virtualization. It emulates the machine's processor through dynamic binary translation and provides a set of different hardware and device models for the machine, enabling it to run a variety of guest operating systems. 
+
+To boot the OS in an emulator without a graphical user interface, run `make qemu-nox`
+
+## Adding a custom system call in xv6
+Make changes to the following 5 files:
+- `syscall.h` stores system call numbers
+- `sysproc.c` stores implemented function
+- `syscall.c` connects system call to function
+- `usys.S` stores the system call interfaces
+- `user.h` stores the functions that user programs actually call, mapped to system call with the system call number via the pre-processor directive. 
+
+## Adding a user program to xv6
+- Write `myprogram.c`
+- Add `myprogram` to the `Makefile`
+
+# Understanding xv6's system
+## System calls
+
+## Programs
+Each running program is a process.
+Group 1 programs need to be profiled and system call access control tailored. 
+
+Group 2 system programs which are anything that's in vanilla xv6 that's not in group 1... allow total access. Do not interfere
+
+Group 3 unknown new program. DENY EVERYTHING
